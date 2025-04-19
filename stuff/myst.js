@@ -24,15 +24,18 @@ const SECONDSTAGE = `
 let effort = 0;
 let success = 0;
 const answerGroups = {
-    close: new Set(["kissa", "haamu", "kummitus"]),
-    taunt: new Set(["linna", "hämeenlinna", "hämeen linna"]),
+    close: new Set(["kissa", "haamu", "kummitus", "katti", "kisu", "aave", "kummittelu", "kummittelee", "henki", "tassut",
+        "kustaa", "kustaa ii aadolf", "kustaa ii aadolf", "kustaa 2 aadolf", "kustaa ii adolf", "kustaa 2 adolf",
+        "gustav ii adolf", "gustav 2 adolf", "gustav ii aadolf", "gustavus adolphus", "gustaf adolf", "gustaf ii adolf",
+        "gustafus", "kustaa", "gustav", "adolf", "aadolf", "gustaf"
+    ]),
+    taunt: new Set(["linna", "hämeenlinna", "hämeen linna", "rakennus", "tavastehus", "linnoitus"]),
     correct: "pirskatti"
 };
 const messages = {
-    close: "polttaa",
-    taunt: "höphö",
-    correct: "oikein",
-    default: "jaa"
+    close: "polttaa...",
+    taunt: "Ihanko totta? \u{1FAE0}",
+    default: "hmm..."
 };
 
 image.onload = () => {
@@ -170,6 +173,8 @@ function checkAnswer() {
     } else if (answerGroups.taunt.has(input)) {
         output.textContent = messages.taunt;
         flashText();
+    } else if (input === answerGroups.correct) {
+        finalReveal();
     } else {
         output.textContent = messages.default;
         flashText();
@@ -183,5 +188,48 @@ function flashText() {
     setTimeout(() => {
         tauntText.classList.remove('revealed');
         tauntText.classList.add('hiding');
-    }, 5000);
+    }, 3000);
+}
+
+const REVEAL = `
+    <div id="done" class="hiding" style="display: block;">
+        <h1>Oikein! Hämeen linnassa kummittelee Pirskatti.</h1>
+        <p>Jokaisessa itseään kunnioittavassa linnassa ja vanhassa kartanossa vaeltaa valkopukuinen nainen.</p>
+
+        <p>Sellainen löytyy myös Hämeen linnasta.</p>
+
+        <p>Kerrotaan että linnan valkopukuinen nainen on Birger jaarlin <b>Synnöve</b>-sisko, joka otti ja rakastui
+            hämäläiseen heimopäällikköön, pakanaan kaiken lisäksi. Kostoksi veli sulki hänet yhteen linnan tyrmistä.</p>
+        <p>Vuosia sitten Helsingin Sanomien Nyt-liite valitsi Hämeen linnan Suomen kummituslinnaksi numero yksi. Kerrotaan,
+            että linnan aineettomaan väkeen kuuluvat myös pariskunta <b>Kotivalo</b> ja <b>Jeremias</b> sekä kummituskissa
+            <b>Pirskatti</b>.</p>
+
+        <p>Kuninkaansalin tiililattiassa näkyvät kissantassujen jäljet. Pirskatti tai joku sen lajitoveri on aikanaan
+            päässyt tassuttelemaan kuivumassa olevien tiilien päällä.</p>
+        <img src="stuff/tassut.png">
+
+        <p>Ruotsin kuningas Kustaa II Aadolf (1594 -1632) vieraili Hämeen linnassa pariinkin otteeseen. Tarinan mukaan
+            Pirskatti oli juuri hänen lemmikkikissansa.</p>
+        <p>Kerrotaan, että kummituskissa naukuu mielellään juuri lasten satutuntien aikana. Joku lapsista on kertonut
+            nähneensäkin punertavaturkkisen Pirskatin.</p>
+        <button onclick="window.open('https://www.geocaching.com/map#?ll=61.00333,24.46555', '_blank')">
+            Linkki Geocaching.comiin
+        </button>
+    </div>
+`;
+
+function finalReveal() {
+    const con = document.getElementById('container');
+    const cont = Array.from(con.children);
+    cont.forEach(c => {
+        c.classList.add('hiding');
+    });
+    setTimeout(() => {
+        con.innerHTML = REVEAL;
+    }, 1000);
+    setTimeout(() => {
+        const done = document.getElementById('done');
+        done.classList.remove('hiding');
+        done.classList.add('revealed');
+    }, 2000);
 }
