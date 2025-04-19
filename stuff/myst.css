@@ -1,0 +1,28 @@
+body {
+    background-color: grey;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 
+
+#container {
+    max-width: 800px;
+    background-color: black;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    gap: 0;
+}
+
+.cell canvas {
+    display: block;
+}
+
+@media (min-width: 800px) {
+    body {
+        min-height: 100vh;
+    }
+}
