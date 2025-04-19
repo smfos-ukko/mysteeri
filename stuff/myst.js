@@ -2,12 +2,20 @@ const image = new Image();
 const solvedImage = new Image();
 const TILECOUNT = 4;
 const SHUFFLES = 1;
-image.src = 'stuff/puzzle.png';
+if (window.innerWidth < 800) {
+    image.src = 'stuff/puzzle-small.png';
+    solvedImage.src = 'stuff/solved-small.png';
+} else {
+    image.src = 'stuff/puzzle.png';
+    solvedImage.src = 'stuff/solved.png';
+}
 let solvedAudio;
 let blank;
 let grid;
 const SECONDSTAGE = `
-    <button id="answerButton">perse</button>
+    <div id="mech">
+        <button id="answerButton">perse</button>
+    </div>
 `;
 let effort = 0;
 let success = 0;
@@ -66,7 +74,6 @@ window.onload = (event) => {
     document.head.appendChild(style);
     document.getElementById('container').insertAdjacentHTML('beforeend', SECONDSTAGE);
     solvedAudio = new Audio('stuff/sound.ogg');
-    solvedImage.src = 'stuff/solved.png';
     solvedImage.classList.add('final');
 }
 
@@ -111,6 +118,7 @@ function checkTiles() {
 }
 
 function puzzleSolved() {
+    solvedAudio.volume = 0.1;
     solvedAudio.play();
     solvedImage.classList.remove('final');
     solvedImage.classList.add('solved');

@@ -1,13 +1,12 @@
 body {
-    background-color: grey;
+    background-color: black;
     color: white;
     display: flex;
     justify-content: center;
-    align-items: center;
 } 
 
 #container {
-    max-width: 800px;
+    max-width: 100vw;
     background-color: black;
     text-align: center;
 }
@@ -21,18 +20,35 @@ body {
     display: block;
 }
 
-.final {
+.final, .solved {
     opacity: 0;
     transition: opacity 1s ease;
 }
 
 .solved {
     opacity: 1;
-    transition: opacity 1s ease;
+}
+
+.slide-in {
+    transform: translateY(0);
+    transition: transform 1s ease, opacity 1s ease;
+    opacity: 1;
+}
+
+.slide-hidden {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+#mech {
+    margin-top: 20px;
 }
 
 @media (min-width: 800px) {
     body {
         min-height: 100vh;
+    }
+    .container {
+        max-width: 800px;
     }
 }
