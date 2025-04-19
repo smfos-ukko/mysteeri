@@ -9,16 +9,32 @@ if (window.innerWidth < 800) {
     image.src = 'stuff/puzzle.png';
     solvedImage.src = 'stuff/solved.png';
 }
+solvedImage.classList.add('hiding');
 let solvedAudio;
 let blank;
 let grid;
+let ansBut;
 const SECONDSTAGE = `
     <div id="mech">
-        <button id="answerButton">perse</button>
+        <p>Miau?</p>
+        <input id="answerBox"></input><button onClick="checkAnswer()" id="answerButton">vastaa</button>
+        <p id="hint" class="hiding"></p>
     </div>
 `;
 let effort = 0;
 let success = 0;
+const answerGroups = {
+    close: new Set(["kissa", "haamu", "kummitus"]),
+    taunt: new Set(["linna", "hämeenlinna", "hämeen linna"]),
+    correct: "pirskatti"
+};
+const messages = {
+    close: "polttaa",
+    taunt: "höphö",
+    correct: "oikein",
+    default: "jaa"
+};
+
 image.onload = () => {
     const tileSize = image.width / TILECOUNT;
     let i = 0;
@@ -72,9 +88,7 @@ window.onload = (event) => {
         }
     `;
     document.head.appendChild(style);
-    document.getElementById('container').insertAdjacentHTML('beforeend', SECONDSTAGE);
     solvedAudio = new Audio('stuff/sound.ogg');
-    solvedImage.classList.add('final');
 }
 
 function moveCells(clicked) {
@@ -118,10 +132,56 @@ function checkTiles() {
 }
 
 function puzzleSolved() {
-    solvedAudio.volume = 0.1;
-    solvedAudio.play();
-    solvedImage.classList.remove('final');
-    solvedImage.classList.add('solved');
-    grid.innerHTML = '';
-    grid.appendChild(solvedImage);
+    document.querySelectorAll('canvas').forEach(canvas => {
+        canvas.style.visibility = 'visible';
+    });
+    setTimeout(() => {
+        document.querySelectorAll('canvas').forEach(canvas => {
+            canvas.classList.add('hiding');
+        });
+    }, 1000);
+    setTimeout(() => {
+        grid.innerHTML = '';
+        grid.appendChild(solvedImage);
+        solvedAudio.volume = 0.1;
+        solvedAudio.play();
+        requestAnimationFrame(() => {
+            solvedImage.classList.remove('hiding');
+            solvedImage.classList.add('revealed');
+        });
+    }, 2000);
+    setTimeout(() => {
+        document.getElementById('container').insertAdjacentHTML('beforeend', SECONDSTAGE);
+        ans = document.getElementById('answerBox');
+        ans.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+    }, 4000);
+}
+
+function checkAnswer() {
+    const input = document.getElementById('answerBox').value.trim().toLowerCase();
+    const output = document.getElementById('hint');
+    if (answerGroups.close.has(input)) {
+        output.textContent = messages.close;
+        flashText();
+    } else if (answerGroups.taunt.has(input)) {
+        output.textContent = messages.taunt;
+        flashText();
+    } else {
+        output.textContent = messages.default;
+        flashText();
+    }
+}
+
+function flashText() {
+    const tauntText = document.getElementById('hint');
+    tauntText.classList.remove('hiding');
+    tauntText.classList.add('revealed');
+    setTimeout(() => {
+        tauntText.classList.remove('revealed');
+        tauntText.classList.add('hiding');
+    }, 5000);
 }

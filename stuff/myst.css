@@ -20,24 +20,14 @@ body {
     display: block;
 }
 
-.final, .solved {
+.hiding {
     opacity: 0;
     transition: opacity 1s ease;
 }
 
-.solved {
+.revealed {
     opacity: 1;
-}
-
-.slide-in {
-    transform: translateY(0);
-    transition: transform 1s ease, opacity 1s ease;
-    opacity: 1;
-}
-
-.slide-hidden {
-    transform: translateY(100%);
-    opacity: 0;
+    transition: opacity 1s ease;
 }
 
 #mech {
