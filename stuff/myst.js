@@ -1,8 +1,11 @@
 const image = new Image();
+const solvedImage = new Image();
 const TILECOUNT = 4;
-const SHUFFLES = 50;
+const SHUFFLES = 1;
 image.src = 'stuff/puzzle.png';
+let solvedAudio;
 let blank;
+let grid;
 const SECONDSTAGE = `
     <button id="answerButton">perse</button>
 `;
@@ -28,7 +31,7 @@ image.onload = () => {
     }
 
     //SHUFFLE
-    const grid = document.querySelector('#tileContainer');
+    grid = document.querySelector('#tileContainer');
     let cells = Array.from(grid.children);
     blank = cells[Math.floor(Math.random() * cells.length)];
     blank.classList.add('blank');
@@ -38,7 +41,7 @@ image.onload = () => {
     while (moves < SHUFFLES) {
         cells = Array.from(grid.children);
         const randomCell = cells[Math.floor(Math.random() * cells.length)];
-        moves = moves + moveCells(grid, randomCell);
+        moves = moves + moveCells(randomCell);
         effort++;
     }
     console.log('efforts: ', effort, ' successes: ', success);
@@ -47,7 +50,9 @@ image.onload = () => {
     grid.addEventListener('click', e => {
         const clicked = e.target.closest('.cell');
         if (clicked == null) return;
-        const newBlank = moveCells(grid, clicked);
+        if (moveCells(clicked) == 1) {
+            checkTiles();
+        }
     });
 }
 
@@ -60,12 +65,15 @@ window.onload = (event) => {
     `;
     document.head.appendChild(style);
     document.getElementById('container').insertAdjacentHTML('beforeend', SECONDSTAGE);
+    solvedAudio = new Audio('stuff/sound.ogg');
+    solvedImage.src = 'stuff/solved.png';
+    solvedImage.classList.add('final');
 }
 
-function moveCells(grid, clicked) {
+function moveCells(clicked) {
     if (clicked.classList.contains('blank')) return 0;
-    const a = getCoords(grid, clicked);
-    const b = getCoords(grid, blank);
+    const a = getCoords(clicked);
+    const b = getCoords(blank);
     if ((Math.abs(b[0] - a[0]) == 1 && a[1] == b[1]) || (Math.abs(b[1] - a[1]) == 1 && a[0] == b[0])) {
         const a2 = clicked.nextSibling;
         const b2 = blank.nextSibling;
@@ -83,11 +91,29 @@ function moveCells(grid, clicked) {
     return 0;
 }
 
-function getCoords(grid, cell) {
+function getCoords(cell) {
     const cells = Array.from(grid.children);
     const index = cells.indexOf(cell);
     const val = [];
     val[0] = index % TILECOUNT;
     val[1] = Math.floor(index / TILECOUNT);
     return val;
+}
+
+function checkTiles() {
+    const cells = Array.from(grid.children);
+    for (let i = 0; i < cells.length; i++) {
+        if (parseInt(cells[i].dataset.index) !== i) {
+            return;
+        }
+    }
+    puzzleSolved();
+}
+
+function puzzleSolved() {
+    solvedAudio.play();
+    solvedImage.classList.remove('final');
+    solvedImage.classList.add('solved');
+    grid.innerHTML = '';
+    grid.appendChild(solvedImage);
 }

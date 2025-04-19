@@ -21,6 +21,16 @@ body {
     display: block;
 }
 
+.final {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.solved {
+    opacity: 1;
+    transition: opacity 1s ease;
+}
+
 @media (min-width: 800px) {
     body {
         min-height: 100vh;
