@@ -41,11 +41,21 @@ b {
     margin-top: 20px;
 }
 
+#done {
+    display: block; 
+    max-width: 800px;
+}
+
+
+
 @media (min-width: 800px) {
     body {
         min-height: 100vh;
     }
     .container {
         max-width: 800px;
+    }
+    #done p {
+        padding: 0px 150px;
     }
 }

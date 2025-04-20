@@ -192,7 +192,7 @@ function flashText() {
 }
 
 const REVEAL = `
-    <div id="done" class="hiding" style="display: block;">
+    <div id="done" class="hiding">
         <h1>Oikein! Hämeen linnassa kummittelee Pirskatti.</h1>
         <p>Jokaisessa itseään kunnioittavassa linnassa ja vanhassa kartanossa vaeltaa valkopukuinen nainen.</p>
 
